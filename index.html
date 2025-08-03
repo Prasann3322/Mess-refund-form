@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mess Refund Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    .navbar {
+      background-color: #003366;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .popup-message {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #dff0d8;
+      color: #3c763d;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      transform: translateY(-100%);
+      transition: transform 0.5s ease-in-out;
+      z-index: 1;
+    }
+
+    .popup-message.show {
+      transform: translateY(0);
+    }
+
+    h2 {
+      text-align: center;
+      color: #003366;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background-color: #003366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0055a5;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        max-width: 80vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    Mess Refund Form
+  </div>
+
+  <div class="container">
+    <div class="popup-message" id="popup-message"></div>
+
+    <h2>Fill in Your Bank Details</h2>
+    <form id="refund-form">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="account">Bank Account Number</label>
+      <input type="text" id="account" name="account" required>
+
+      <label for="ifsc">IFSC Code</label>
+      <input type="text" id="ifsc" name="ifsc" required>
+
+      <label for="branch">Branch Name</label>
+      <input type="text" id="branch" name="branch" required>
+
+      <label for="branchCode">Branch Code</label>
+      <input type="text" id="branchCode" name="branchCode" required>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('refund-form');
+    const popup = document.getElementById('popup-message');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      fetch("https://script.google.com/macros/s/AKfycbylK1GhLJrJji7r3_zq99xedT6Mf5d2x0NU54VNdI7MJhBAt0sKSlMiB9_IefFy6xO8/exec", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          showPopup("✅ Your request has been submitted.");
+          form.reset();
+        } else {
+          showPopup("❌ Something went wrong. Please try again.");
+        }
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        showPopup("❌ Submission failed. Please try again.");
+      });
+    });
+
+    function showPopup(messageText) {
+      popup.textContent = messageText;
+      popup.classList.add('show');
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
